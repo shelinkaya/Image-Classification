@@ -1,3 +1,4 @@
+#Import required packages
 import urllib.request
 import torch
 import torch.nn as nn
@@ -8,16 +9,19 @@ from torch.utils.data import Dataset, DataLoader
 from torch.utils.data import random_split
 from torchsummary import summary 
 import torchvision.transforms as T
+from PIL import Image
+import matplotlib.pyplot as plt
+from torchvision import transforms
+from torchvision import models
+import torch.optim as optim
+
 #read image
 img = read_image('tiger.jpg')
-import matplotlib.pyplot as plt
-from PIL import Image
 img=Image.open("tiger.jpg") 
 plt.imshow(img)
 
-from torchvision import transforms
-## Transform Process
 
+## Transformation Process
 preprocess=transforms.Compose([
                                transforms.Resize(256),
                                transforms.CenterCrop(224),
@@ -32,8 +36,7 @@ img_tensor=preprocess(img)
 img_tensor.shape
 batch=img_tensor.unsqueeze(0)
 batch.shape
-from torchvision import models
-import torch.optim as optim
+
 
 ##Defining Pretrained model
 model= models.alexnet(pretrained=True)
@@ -56,7 +59,7 @@ with open("imagenet_class_labels.txt") as f:
 print(classes[292])
 #output will show the class 292: 'tiger, Panthera tigris'
 
-#now see how much percent it is on that class
+#now see the accuracy
 prob=torch.nn.functional.softmax(y, dim=1)[0]*100
 print(classes[index[0]],
      prob[index[0]].item())
